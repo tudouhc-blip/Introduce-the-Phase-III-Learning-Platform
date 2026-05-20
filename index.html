@@ -1,0 +1,398 @@
+<!DOCTYPE html><html lang="en"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+<meta charset="UTF-8">
+<title>Learning Platform Briefing</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Calibri', 'Segoe UI', sans-serif;
+    background: #eef2f7;
+    min-height: 100vh;
+    padding: 30px;
+    color: #1a202c;
+  }
+  .slide {
+    max-width: 1320px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 40px 45px 40px;
+    box-shadow: 0 20px 60px rgba(30, 64, 175, 0.12);
+  }
+
+  /* ===== TITLE ===== */
+  .title-row {
+    display: flex; justify-content: space-between;
+    align-items: flex-end; margin-bottom: 32px;
+    padding-bottom: 22px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  .title h1 {
+    font-size: 2.6em; color: #0f172a;
+    font-weight: 700; letter-spacing: -1.5px; line-height: 1.05;
+  }
+  .title p {
+    color: #64748b; font-size: 1em;
+    margin-top: 6px; font-weight: 400;
+  }
+
+  /* ===== SECTION HEADERS ===== */
+  .section { margin-bottom: 24px; }
+  .sec-head {
+    display: flex; align-items: baseline;
+    gap: 16px; margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .sec-num {
+    font-size: 2em; font-weight: 800;
+    color: #3b82f6; letter-spacing: -2px;
+    line-height: 1;
+  }
+  .sec-title {
+    font-size: 1.35em; font-weight: 700;
+    color: #0f172a; letter-spacing: -0.5px;
+  }
+  .sec-q {
+    font-size: 0.9em; color: #64748b;
+    font-style: italic; margin-left: auto;
+  }
+
+  /* ===== CARDS GRID ===== */
+  .cards-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card {
+    border-radius: 18px;
+    padding: 22px 24px;
+    position: relative;
+    min-height: 150px;
+  }
+
+  /* ----- Distinct blue / grey tones ----- */
+  /* Deep blue gradient (hero) */
+  .tone-deep {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    box-shadow: 0 12px 30px rgba(59,130,246,0.35);
+  }
+  .tone-deep .card-label { color: #dbeafe; }
+  .tone-deep .card-title { color: white; }
+  .tone-deep .card-body { color: #e0e7ff; }
+  .tone-deep .card-body a { color: white; border-bottom-color: rgba(255,255,255,0.6); }
+  .tone-deep .badge { background: rgba(255,255,255,0.15); border-color: #ffffff; }
+  .tone-deep .badge svg { stroke: #ffffff; }
+  .tone-deep .chip { background: rgba(255,255,255,0.2); color: white; }
+
+  /* Light blue tones */
+  .tone-sky    { background: #e0f2fe; }   /* sky-100 */
+  .tone-blue   { background: #dbeafe; }   /* blue-100 */
+  .tone-indigo { background: #e0e7ff; }   /* indigo-100 */
+  .tone-cyan   { background: #cffafe; }   /* cyan-100 */
+  .tone-steel  { background: #d6e4f0; }   /* custom steel blue */
+
+  /* Grey / slate tones */
+  .tone-slate  { background: #e2e8f0; }   /* slate-200 */
+  .tone-stone  { background: #f1f5f9; }   /* slate-100 */
+  .tone-zinc   { background: #e5e7eb; }   /* gray-200 */
+  .tone-mist   { background: #eef2f7; }   /* light mist */
+
+  .card-label {
+    font-size: 0.78em; color: #475569;
+    font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.2px; margin-bottom: 10px;
+  }
+  .card-title {
+    font-size: 1.05em; font-weight: 700;
+    color: #0f172a; margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+  .card-body {
+    font-size: 0.88em; color: #334155; line-height: 1.55;
+  }
+  .card-body a {
+    color: #1d4ed8; font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1.5px solid #93c5fd;
+  }
+
+  /* ===== BADGE ICONS ===== */
+  .badge {
+    position: absolute;
+    top: 18px; right: 18px;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #1e3a8a;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .badge svg { width: 22px; height: 22px; stroke: #1e3a8a; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Highlights / chips */
+  .chip {
+    display: inline-block;
+    background: #fef3c7; color: #b45309;
+    padding: 2px 9px; border-radius: 10px;
+    font-size: 0.82em; font-weight: 700;
+    margin: 0 2px;
+  }
+  .chip-blue { background: #bfdbfe; color: #1d4ed8; }
+
+  /* Yellow highlight for names */
+  .hl {
+    background: #fde68a;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+    color: #1a202c;
+  }
+
+  /* Team list inside card */
+  .mini-list {
+    margin-top: 8px; display: flex;
+    flex-direction: column; gap: 6px;
+  }
+  .mini-row {
+    display: flex; align-items: center; gap: 9px;
+    font-size: 0.84em;
+  }
+  .mini-av {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.72em; color: white;
+    flex-shrink: 0;
+  }
+  .av1 { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+  .av2 { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
+  .av3 { background: linear-gradient(135deg, #93c5fd, #60a5fa); }
+  .av4 { background: linear-gradient(135deg, #1e40af, #1e3a8a); }
+  .mini-row span.role { color: #475569; }
+
+  /* Step numbers */
+  .step-num {
+    display: inline-flex;
+    width: 22px; height: 22px;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white; border-radius: 50%;
+    align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.75em;
+    margin-right: 8px; vertical-align: middle;
+  }
+
+  .footer-note {
+    text-align: center; margin-top: 22px;
+    font-size: 0.8em; color: #94a3b8;
+    font-style: italic; letter-spacing: 0.3px;
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <!-- TITLE -->
+  <div class="title-row">
+    <div class="title">
+      <h1>Learning Platform Briefing</h1>
+      <p>GenAI-Responsive Competency Framework for University Teachers · EdUHK × SJTU</p>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 1 ============ -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-num">01</div>
+      <div class="sec-title">Introduce the Learning Platform</div>
+      <div class="sec-q">How does the platform embed in the EdUHK–SJTU project?</div>
+    </div>
+    <div class="cards-2">
+
+      <div class="card tone-deep">
+        <div class="card-label">a · Context</div>
+        <div class="card-title">Part of the Framework Toolkit</div>
+        <div class="card-body">
+          The Learning Platform is one component of the toolkit for the
+          <a href="#">GenAI-Responsive Competency Framework for University Teachers</a>,
+          developed by professors at EdUHK &amp; SJTU (incl. Dr Dai &amp; Chirp).
+          The Framework is the <strong>core</strong> of the project — all deliverables
+          (self-assessment tool, learning platform, guidebook, etc.) sit under its umbrella.
+        </div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"></path></svg>
+        </div>
+      </div>
+
+      <div class="card tone-sky">
+        <div class="card-label">b · User Philosophy</div>
+        <div class="card-title">Refer to Phase III Slides</div>
+        <div class="card-body">
+          For the platform user flow, kindly refer to <span class="chip chip-blue">pages 10–12</span>
+          (Phase III: Learning Platform Development) of the slides attached, which we presented during
+          the <strong>Monday meeting</strong>.
+        </div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24"><path d="M4 4h12l4 4v12H4z"></path><path d="M16 4v4h4M8 12h8M8 16h8M8 8h4"></path></svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ SECTION 2 ============ -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-num">02</div>
+      <div class="sec-title">Introduce the Team</div>
+      <div class="sec-q">What is our division of labour?</div>
+    </div>
+    <div class="cards-3">
+
+      <div class="card tone-blue">
+        <div class="card-label">a · Technical Team</div>
+        <div class="card-title">Led by SJTU</div>
+        <div class="card-body">
+          Technical development is led by <span class="hl">Dr Lei Jiale</span>
+          (@RadiumScriptTang) from SJTU and his team.
+          Dr Lei brings a strong computer-science background — he's a pro. :)
+        </div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"></path></svg>
+        </div>
+      </div>
+
+      <div class="card tone-slate">
+        <div class="card-label">b · Strategy Team</div>
+        <div class="card-title">EdUHK · Planning &amp; QA</div>
+        <div class="card-body">
+          Responsible for strategic planning &amp; quality assurance.
+          <div class="mini-list">
+            <div class="mini-row"><div class="mini-av av1">C</div><span class="hl">Chen</span><span class="role">· Strategic planning</span></div>
+            <div class="mini-row"><div class="mini-av av2">J</div><span class="hl">Jia</span><span class="role">· Strategic planning</span></div>
+            <div class="mini-row"><div class="mini-av av3">V</div><span class="hl">Vincy</span><span class="role">· PD resource, UI/UX</span></div>
+            <div class="mini-row"><div class="mini-av av4">P</div><strong>Profs</strong><span class="role">· Ba Shen, Zhu Jinxin, Chirp</span></div>
+          </div>
+        </div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"></circle><circle cx="17" cy="10" r="2.2"></circle><path d="M3 19c0-3 3-5 6-5s6 2 6 5M15 19c0-2 2-3.5 4-3.5s2 1 2 3.5"></path></svg>
+        </div>
+      </div>
+
+      <div class="card tone-indigo">
+        <div class="card-label">c · Members You'll Meet</div>
+        <div class="card-title">Next Friday <span style="font-size:0.7em;color:#64748b;font-weight:500;">(tentatively)</span></div>
+        <div class="card-body">
+          Members involved in regular check-ins are highlighted in
+          <span class="hl">yellow</span>. You're warmly invited to join the
+          meet-ups as our <strong>SoE focal point</strong> from our next meeting.
+        </div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M8 3v4M16 3v4M8 14h2M14 14h2M8 18h2M14 18h2"></path></svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ SECTION 3 ============ -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-num">03</div>
+      <div class="sec-title">Introduce the Development Progress</div>
+      <div class="sec-q">What have we done?</div>
+    </div>
+    <div class="cards-3">
+
+      <div class="card tone-cyan">
+        <div class="card-label">a · Platform Demo</div>
+        <div class="card-title">Built From Scratch</div>
+        <div class="card-body">
+          Dr Lei has developed a <a href="#">demo platform</a> from scratch.
+          We've completed <span class="chip chip-blue">2–3 feedback loops</span> through
+          monthly check-ins. Feel free to play with it at your convenience.
+        </div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="1"></rect><path d="M8 21h8M12 17v4M7 8l3 2-3 2M11 12h5"></path></svg>
+        </div>
+      </div>
+
+      <div class="card tone-stone">
+        <div class="card-label">b · Source Hunting</div>
+        <div class="card-title">PD Resource Scan</div>
+        <div class="card-body">
+          We've been searching across databases for PD resources and
+          identified several potentially available <strong>courses &amp; contents</strong>
+          for the platform.
+        </div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"></circle><path d="M16 16l5 5"></path></svg>
+        </div>
+      </div>
+
+      <div class="card tone-steel">
+        <div class="card-label">c · UI/UX Improvement</div>
+        <div class="card-title">Reference &amp; Refine</div>
+        <div class="card-body">
+          We referenced emerging AI-driven learning platforms recommended by
+          <strong>Chirp</strong> to further refine the UI/UX flow.
+        </div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"></path><path d="M14 7h7v7"></path></svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ SECTION 4 ============ -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-num">04</div>
+      <div class="sec-title">Introduce the Next Steps</div>
+      <div class="sec-q">What do we plan to do next?</div>
+    </div>
+    <div class="cards-3">
+
+      <div class="card tone-zinc">
+        <div class="card-label">a · Modify Current Sections</div>
+        <div class="card-title">Refine &amp; Validate</div>
+        <div class="card-body">
+          <div style="margin-bottom:8px;"><span class="step-num">i</span><strong>Self-assessment</strong> — apply the CAT model and confirm all assessment items after validation.</div>
+          <div><span class="step-num">ii</span><strong>Resources</strong> — continuously identify PD resources suitable for migration to the platform.</div>
+        </div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"></path><path d="M14 6l3 3"></path></svg>
+        </div>
+      </div>
+
+      <div class="card tone-mist">
+        <div class="card-label">b · Add a New Section</div>
+        <div class="card-title">Digital Workshops</div>
+        <div class="card-body">
+          We're seeking to integrate <strong>digital workshops</strong> as a new
+          activity column on the platform — to be discussed in further detail.
+        </div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v10M7 12h10"></path></svg>
+        </div>
+      </div>
+
+      <div class="card tone-deep">
+        <div class="card-label">c · Pilot the Platform</div>
+        <div class="card-title">Go Global</div>
+        <div class="card-body">
+          We aim to collaborate with <strong>higher-education institution partners
+          across the globe</strong> to pilot the platform — schedule permitting.
+        </div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"></path></svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer-note">EdUHK × SJTU Collaborative Initiative · Confidential Briefing · Phase III</div>
+
+</div>
+
+
+
+</body></html>
